@@ -1,6 +1,11 @@
-QT += quick
 QT += core bluetooth
+QT += qml network quick positioning location
 CONFIG += c++11
+
+# Workaround for QTBUG-38735
+QT_FOR_CONFIG += location-private
+QT_FOR_CONFIG += sql opengl
+QT_FOR_CONFIG += concurrent
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings

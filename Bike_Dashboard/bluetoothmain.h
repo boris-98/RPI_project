@@ -19,6 +19,9 @@ public:
     BluetoothMain();
     ~BluetoothMain();
 
+    void getObject(QObject *obj);
+
+
 private slots:
     void getCoordinates(const QString &sender, const QString &message);
 
@@ -30,6 +33,7 @@ private slots:
 private:
     BluetoothServer *server;
     QString localName;
+    QObject *objekat;
 
 
 };

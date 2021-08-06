@@ -39,7 +39,6 @@ private:
     QBluetoothServiceInfo serviceInfo;
     QList<QBluetoothSocket *> clientSockets;
 
-
 };
 
 

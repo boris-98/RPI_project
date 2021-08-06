@@ -39,13 +39,26 @@ void BluetoothMain::clientDisconnected(const QString &name)
 
 }
 
+void BluetoothMain::getObject(QObject *obj)
+{
+    objekat = obj;
+
+}
+
 void BluetoothMain::getCoordinates(const QString &sender, const QString &message)
 {
     qDebug() << QString::fromLatin1("Sender is: %1").arg(sender);
 
     if(QString(message).left(6) == "$GPGGA")
     {
-        qDebug() << QString(message);
+        double latitude = (message.section(',', 2, 2).left(2)).toDouble() + (message.section(',', 2, 2).midRef(2)).toDouble() / 60;  // ddmm.mmmm  -> dd + mm.mmmm/60 = latitude
+        double longitude = (message.section(',', 4, 4).left(3)).toDouble() + (message.section(',', 4, 4).midRef(3)).toDouble() / 60; // dddmm.mmmm -> ddd + mm.mmmm/60 = longitude
+        QVariant a(latitude);
+        QVariant b(longitude);
+        QMetaObject::invokeMethod(objekat, "addCoordinatesToMap", Q_ARG(QVariant, a), Q_ARG(QVariant, b));
+        qDebug() << message;
+        qDebug() << a.toString();
     }
+
 
 }

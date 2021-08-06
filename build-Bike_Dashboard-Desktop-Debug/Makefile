@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_QUICK_LIB -DQT_GUI_LIB -DQT_QML_LIB -DQT_NETWORK_LIB -DQT_BLUETOOTH_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_LOCATION_LIB -DQT_POSITIONINGQUICK_LIB -DQT_QUICK_LIB -DQT_GUI_LIB -DQT_BLUETOOTH_LIB -DQT_QML_LIB -DQT_NETWORK_LIB -DQT_POSITIONING_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../Bike_Dashboard -I. -isystem /usr/include/arm-linux-gnueabihf/qt5 -isystem /usr/include/arm-linux-gnueabihf/qt5/QtQuick -isystem /usr/include/arm-linux-gnueabihf/qt5/QtGui -isystem /usr/include/arm-linux-gnueabihf/qt5/QtQml -isystem /usr/include/arm-linux-gnueabihf/qt5/QtNetwork -isystem /usr/include/arm-linux-gnueabihf/qt5/QtBluetooth -isystem /usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++
+INCPATH       = -I../Bike_Dashboard -I. -isystem /usr/include/arm-linux-gnueabihf/qt5 -isystem /usr/include/arm-linux-gnueabihf/qt5/QtLocation -isystem /usr/include/arm-linux-gnueabihf/qt5/QtPositioningQuick -isystem /usr/include/arm-linux-gnueabihf/qt5/QtQuick -isystem /usr/include/arm-linux-gnueabihf/qt5/QtGui -isystem /usr/include/arm-linux-gnueabihf/qt5/QtBluetooth -isystem /usr/include/arm-linux-gnueabihf/qt5/QtQml -isystem /usr/include/arm-linux-gnueabihf/qt5/QtNetwork -isystem /usr/include/arm-linux-gnueabihf/qt5/QtPositioning -isystem /usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -38,7 +38,7 @@ DISTNAME      = Bike_Dashboard1.0.0
 DISTDIR = /home/pi/Desktop/RPI_project/build-Bike_Dashboard-Desktop-Debug/.tmp/Bike_Dashboard1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath-link,/usr/lib/arm-linux-gnueabihf
-LIBS          = $(SUBLIBS) -lQt5Quick -lQt5Gui -lQt5Qml -lQt5Network -lQt5Bluetooth -lQt5Core -lGLESv2 -lpthread -latomic 
+LIBS          = $(SUBLIBS) -lQt5Location -lQt5PositioningQuick -lQt5Quick -lQt5Gui -lQt5Bluetooth -lQt5Qml -lQt5Network -lQt5Positioning -lQt5Core -lGLESv2 -lpthread -latomic 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -304,11 +304,14 @@ Makefile: ../Bike_Dashboard/Bike_Dashboard.pro /usr/lib/arm-linux-gnueabihf/qt5/
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/lex.prf \
 		../Bike_Dashboard/Bike_Dashboard.pro \
 		../Bike_Dashboard/qml.qrc \
+		/usr/lib/arm-linux-gnueabihf/libQt5Location.prl \
+		/usr/lib/arm-linux-gnueabihf/libQt5PositioningQuick.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Quick.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Gui.prl \
+		/usr/lib/arm-linux-gnueabihf/libQt5Bluetooth.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Qml.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Network.prl \
-		/usr/lib/arm-linux-gnueabihf/libQt5Bluetooth.prl \
+		/usr/lib/arm-linux-gnueabihf/libQt5Positioning.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Core.prl
 	$(QMAKE) -o Makefile ../Bike_Dashboard/Bike_Dashboard.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf:
@@ -426,11 +429,14 @@ Makefile: ../Bike_Dashboard/Bike_Dashboard.pro /usr/lib/arm-linux-gnueabihf/qt5/
 /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/lex.prf:
 ../Bike_Dashboard/Bike_Dashboard.pro:
 ../Bike_Dashboard/qml.qrc:
+/usr/lib/arm-linux-gnueabihf/libQt5Location.prl:
+/usr/lib/arm-linux-gnueabihf/libQt5PositioningQuick.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Quick.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Gui.prl:
+/usr/lib/arm-linux-gnueabihf/libQt5Bluetooth.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Qml.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Network.prl:
-/usr/lib/arm-linux-gnueabihf/libQt5Bluetooth.prl:
+/usr/lib/arm-linux-gnueabihf/libQt5Positioning.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../Bike_Dashboard/Bike_Dashboard.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
@@ -478,7 +484,9 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_qml.cpp
 qrc_qml.cpp: ../Bike_Dashboard/qml.qrc \
 		/usr/lib/qt5/bin/rcc \
-		../Bike_Dashboard/main.qml
+		../Bike_Dashboard/NavigationPageForm.ui.qml \
+		../Bike_Dashboard/main.qml \
+		../Bike_Dashboard/NavigationPage.qml
 	/usr/lib/qt5/bin/rcc -name qml ../Bike_Dashboard/qml.qrc -o qrc_qml.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -493,12 +501,12 @@ compiler_moc_header_clean:
 moc_bluetoothserver.cpp: ../Bike_Dashboard/bluetoothserver.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Desktop/RPI_project/build-Bike_Dashboard-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Desktop/RPI_project/Bike_Dashboard -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtQuick -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtQml -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtBluetooth -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../Bike_Dashboard/bluetoothserver.h -o moc_bluetoothserver.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Desktop/RPI_project/build-Bike_Dashboard-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Desktop/RPI_project/Bike_Dashboard -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtLocation -I/usr/include/arm-linux-gnueabihf/qt5/QtPositioningQuick -I/usr/include/arm-linux-gnueabihf/qt5/QtQuick -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtBluetooth -I/usr/include/arm-linux-gnueabihf/qt5/QtQml -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtPositioning -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../Bike_Dashboard/bluetoothserver.h -o moc_bluetoothserver.cpp
 
 moc_bluetoothmain.cpp: ../Bike_Dashboard/bluetoothmain.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Desktop/RPI_project/build-Bike_Dashboard-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Desktop/RPI_project/Bike_Dashboard -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtQuick -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtQml -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtBluetooth -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../Bike_Dashboard/bluetoothmain.h -o moc_bluetoothmain.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Desktop/RPI_project/build-Bike_Dashboard-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Desktop/RPI_project/Bike_Dashboard -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtLocation -I/usr/include/arm-linux-gnueabihf/qt5/QtPositioningQuick -I/usr/include/arm-linux-gnueabihf/qt5/QtQuick -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtBluetooth -I/usr/include/arm-linux-gnueabihf/qt5/QtQml -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtPositioning -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../Bike_Dashboard/bluetoothmain.h -o moc_bluetoothmain.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
