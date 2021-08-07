@@ -8,13 +8,23 @@ import QtQuick.Extras 1.4
 
 ApplicationWindow {
     visible: true
-    width: 700
+    width: 1000
     height: 700
     title: qsTr("Bike Dashboard")
 
-    function addCoordinatesToMap(a, b){
-        cyclePath.addCoordinate(QtPositioning.coordinate(a, b))
-        console.log("blabla")
+    property bool first : true
+
+    function addCoordinatesToMap(lat, lon){
+        cyclePath.addCoordinate(QtPositioning.coordinate(lat, lon))
+
+        if(first)   // center and zoom map only for the first recieved coordinate
+        {
+            navigationMap.center = QtPositioning.coordinate(lat, lon)
+            navigationMap.zoomLevel = 16
+            first = false
+        }
+        console.log("addCoordinatesToMap is executed")
+        console.log(lat)
     }
 
     Plugin {
@@ -30,9 +40,11 @@ ApplicationWindow {
 //                       }
 
         //PluginParameter { name: "osm.mapping.prefetching_style"; value: "NoPrefetching" }
-      //  PluginParameter{
-      //      mapboxgl.access_token : "pk.eyJ1IjoiYmJvcmlzcyIsImEiOiJja3IzZXE0a3oyaWVtMzFxaDRlZ3N6ZGk0In0.YtKDQAVsJ7U0Qd2_vz2GEA"
-      //  }
+//        PluginParameter{
+//            name: "mapboxgl.access_token"
+//            value: "pk.eyJ1IjoiYmJvcmlzcyIsImEiOiJja3IzZXE0a3oyaWVtMzFxaDRlZ3N6ZGk0In0.YtKDQAVsJ7U0Qd2_vz2GEA"
+//        }
+
     }
 
 
@@ -41,9 +53,15 @@ ApplicationWindow {
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
+        SpeedometerPageForm {
+
+
+        }
+
         NavigationPageForm {
 
             Map {
+                id: navigationMap
                 anchors.fill: parent
                 plugin: mapPlugin
                 center: QtPositioning.coordinate(45.26, 19.81)
@@ -53,8 +71,8 @@ ApplicationWindow {
 
                 MapPolyline {
                     id: cyclePath
-                    line.width: 3
-                    line.color: 'green'
+                    line.width: 4
+                    line.color: 'blue'
                     path: [
                         { latitude: 45.26, longitude: 19.81 },
                         { latitude: 45.5, longitude: 20.0 },
@@ -75,10 +93,10 @@ ApplicationWindow {
         currentIndex: swipeView.currentIndex
 
         TabButton {
-            text: qsTr("Page 1")
+            text: qsTr("Instrumentation")
         }
         TabButton {
-            text: qsTr("Page 2")
+            text: qsTr("Navigation")
         }
     }
 

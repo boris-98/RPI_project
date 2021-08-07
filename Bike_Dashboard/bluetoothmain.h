@@ -34,6 +34,9 @@ private:
     BluetoothServer *server;
     QString localName;
     QObject *objekat;
+    double oldLatitude, newLatitude;
+    double oldLongitude, newLongitude;
+
 
 
 };

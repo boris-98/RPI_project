@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>NavigationPage.qml</file>
         <file>NavigationPageForm.ui.qml</file>
+        <file>SpeedometerPage.qml</file>
+        <file>SpeedometerPageForm.ui.qml</file>
     </qresource>
 </RCC>

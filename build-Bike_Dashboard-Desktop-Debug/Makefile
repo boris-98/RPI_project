@@ -485,8 +485,10 @@ compiler_rcc_clean:
 qrc_qml.cpp: ../Bike_Dashboard/qml.qrc \
 		/usr/lib/qt5/bin/rcc \
 		../Bike_Dashboard/NavigationPageForm.ui.qml \
+		../Bike_Dashboard/SpeedometerPageForm.ui.qml \
 		../Bike_Dashboard/main.qml \
-		../Bike_Dashboard/NavigationPage.qml
+		../Bike_Dashboard/NavigationPage.qml \
+		../Bike_Dashboard/SpeedometerPage.qml
 	/usr/lib/qt5/bin/rcc -name qml ../Bike_Dashboard/qml.qrc -o qrc_qml.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h

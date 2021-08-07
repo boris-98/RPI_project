@@ -7,6 +7,7 @@
 
 #include <QTimer>
 #include <QDebug>
+#include <cmath>
 
 BluetoothMain::BluetoothMain() : QObject()
 {
@@ -18,6 +19,10 @@ BluetoothMain::BluetoothMain() : QObject()
     server->startServer();
 
     localName = QBluetoothLocalDevice().name();
+    oldLatitude = 0.00;
+    oldLongitude = 0.00;
+    newLatitude = 0.00;
+    newLongitude = 0.00;
 
 };
 
@@ -51,13 +56,19 @@ void BluetoothMain::getCoordinates(const QString &sender, const QString &message
 
     if(QString(message).left(6) == "$GPGGA")
     {
-        double latitude = (message.section(',', 2, 2).left(2)).toDouble() + (message.section(',', 2, 2).midRef(2)).toDouble() / 60;  // ddmm.mmmm  -> dd + mm.mmmm/60 = latitude
-        double longitude = (message.section(',', 4, 4).left(3)).toDouble() + (message.section(',', 4, 4).midRef(3)).toDouble() / 60; // dddmm.mmmm -> ddd + mm.mmmm/60 = longitude
-        QVariant a(latitude);
-        QVariant b(longitude);
-        QMetaObject::invokeMethod(objekat, "addCoordinatesToMap", Q_ARG(QVariant, a), Q_ARG(QVariant, b));
-        qDebug() << message;
-        qDebug() << a.toString();
+        newLatitude = (message.section(',', 2, 2).left(2)).toDouble() + (message.section(',', 2, 2).midRef(2)).toDouble() / 60.00;  // ddmm.mmmm  -> dd + mm.mmmm/60 = latitude
+        newLongitude = (message.section(',', 4, 4).left(3)).toDouble() + (message.section(',', 4, 4).midRef(3)).toDouble() / 60.00; // dddmm.mmmm -> ddd + mm.mmmm/60 = longitude
+
+        if(abs( sqrt(pow(newLatitude, 2) + pow(newLongitude, 2)) - sqrt(pow(oldLatitude, 2) + pow(oldLongitude, 2)) ) > 0.0001)   // don't update map for small movements
+        {
+            QVariant lat(newLatitude);
+            QVariant lon(newLongitude);
+            QMetaObject::invokeMethod(objekat, "addCoordinatesToMap", Q_ARG(QVariant, lat), Q_ARG(QVariant, lon));
+            qDebug() << message;
+            //qDebug() << QString("%l").arg(newLatitude, 0, 'g', 30);
+            oldLatitude = newLatitude;
+            oldLongitude = newLongitude;
+        }
     }
 
 
