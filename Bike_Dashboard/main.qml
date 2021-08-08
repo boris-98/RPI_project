@@ -5,6 +5,7 @@ import QtLocation 5.11
 import QtPositioning 5.11
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
+import QtGraphicalEffects 1.0
 
 ApplicationWindow {
     visible: true
@@ -52,9 +53,112 @@ ApplicationWindow {
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
+        interactive : false
 
         SpeedometerPageForm {
 
+            Canvas {
+                    id: canvas
+                    scale: 2
+                    anchors.fill: parent
+                    anchors.centerIn: parent
+
+                    rotation: -235
+
+                    onPaint: {
+                        var c = getContext('2d')
+                        c.clearRect(0, 0, width, height)
+                        c.beginPath()
+                        c.lineWidth = 20
+                        c.strokeStyle = "red"
+                        c.arc(width / 2, height / 2, 170 , 0, 5.06145483 * crc.value/80)    // 290 degrees = 5.06...
+                        c.stroke()
+                    }
+                }
+
+//                ConicalGradient {
+//                    id: progress
+
+//                    rotation: -235
+//                        anchors.fill: bar
+//                        angle: crc.value
+//                        gradient: Gradient {
+//                            GradientStop { position: 0.0; color: "transparent" }
+//                            GradientStop { position: 0.1; color: "white" }
+//                        }
+//                         visible: false // Not visible (it will be painted by the mask)
+//                }
+//                OpacityMask {
+//                        anchors.fill: progress
+//                        rotation: -235
+//                        source: bar
+//                        maskSource: progress
+//                        invert: true
+//                    }
+
+//                Slider {
+//                    id: circ
+//                    value : 0.5
+//                    onValueChanged: canvas.requestPaint()
+//                }
+
+
+            CircularGauge {
+
+                id: crc
+                scale: 2
+                maximumValue: 80
+                stepSize: 0.1
+                value: accelerating ? maximumValue : 0
+                anchors.centerIn: parent
+                onValueChanged: canvas.requestPaint()
+
+                property bool accelerating: false
+
+                Keys.onSpacePressed: accelerating = true
+                Keys.onReleased: {
+                    if (event.key === Qt.Key_Space) {
+                        accelerating = false;
+                        event.accepted = true;
+                    }
+                }
+
+                Component.onCompleted: forceActiveFocus()
+
+                Behavior on value {
+                    NumberAnimation {
+                        duration: 10000
+                    }
+                }
+
+                style : CircularGaugeStyle{
+
+                    tickmarkLabel:  Text {
+                        font.pixelSize: styleData.value >= crc.value ? Math.max(6, outerRadius * 0.11) : Math.max(6, outerRadius * 0.15)
+                        font.bold : styleData.value >= crc.value ? false : true
+                        text: styleData.value
+                        color: styleData.value >= crc.value ? "grey" : "black"
+                        antialiasing: true
+                    }
+
+                    tickmark: Rectangle {
+                                    //visible: styleData.value < 80 || styleData.value % 10 == 0
+                                    implicitWidth: styleData.value >= crc.value ? outerRadius * 0.02 : outerRadius * 0.03
+                                    antialiasing: true
+                                    implicitHeight: styleData.value >= crc.value ? outerRadius * 0.06 : outerRadius * 0.08
+                                    color: styleData.value >= crc.value ? "grey" : "black"
+                                }
+                }
+
+                Text {
+                    id: lcdnumber
+                    x: crc.value >= 10 ? 125 : 140  // shift for 2 digit numbers to center
+                    y: 250
+                    text: crc.value.toLocaleString(Qt.locale(), 'f', 1)
+                    elide: Text.ElideLeft
+                    font.pixelSize: 50
+                }
+            }
 
         }
 

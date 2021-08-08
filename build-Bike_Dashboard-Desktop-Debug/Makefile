@@ -487,7 +487,6 @@ qrc_qml.cpp: ../Bike_Dashboard/qml.qrc \
 		../Bike_Dashboard/NavigationPageForm.ui.qml \
 		../Bike_Dashboard/SpeedometerPageForm.ui.qml \
 		../Bike_Dashboard/main.qml \
-		../Bike_Dashboard/NavigationPage.qml \
 		../Bike_Dashboard/SpeedometerPage.qml
 	/usr/lib/qt5/bin/rcc -name qml ../Bike_Dashboard/qml.qrc -o qrc_qml.cpp
 
