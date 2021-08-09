@@ -1,8 +1,10 @@
 #include "hallmeasure.h"
 
-char HallMeasure::wheelCount = 0;
+char HallMeasure::passCount = 0;
 int HallMeasure::lastMillis = 0;
+int HallMeasure::currentMillis = 0;
 double HallMeasure::wheelRadius = 0.30;
+QObject* HallMeasure::objekat;
 
 HallMeasure::HallMeasure() : QObject ()
 {
@@ -15,29 +17,42 @@ HallMeasure::HallMeasure() : QObject ()
 
 HallMeasure::~HallMeasure(){}
 
-void HallMeasure::hallInterrupt()
-{
-    QString millis = QDateTime::currentDateTime().toString("ss,zzz");
-    int currentMillis = (millis.left(2)).toInt() * 1000 + (millis.right(3)).toInt();
-
-    wheelCount++;
-
-    if(wheelCount >= 2)
-    {
-        double rpm = 60000.0 / (currentMillis - lastMillis) * wheelCount;
-        double speed = 2 * M_PI * wheelRadius * rpm/60;
-
-        lastMillis = currentMillis;
-        wheelCount = 1;
-        qDebug() << speed;
-    }
-
-    qDebug() << "Interrupt in class has happened";
-
-}
-
 void HallMeasure::getObject(QObject *obj)
 {
     objekat = obj;
 
 }
+
+void HallMeasure::hallInterrupt()
+{
+    qDebug() << "Interrupt in class has happened";
+
+    QString millis = QDateTime::currentDateTime().toString("ss,zzz");
+    currentMillis = (millis.left(2)).toInt() * 1000 + (millis.right(3)).toInt();
+
+    passCount++;
+
+    if(passCount == 2)
+    {
+        int diff = currentMillis - lastMillis;
+        if (diff < 0)
+            diff = 60000 + diff;    // e.g. current = 100, last = 59500
+
+        double speed = 2 * M_PI * wheelRadius / (double(diff) / 1000.00);
+
+        QVariant spd(speed);
+        QMetaObject::invokeMethod(objekat, "changeSpeed", Q_ARG(QVariant, spd));
+
+        lastMillis = currentMillis;
+        passCount = 1;
+        qDebug() << speed;
+        qDebug() << diff;
+    }
+    else if(passCount > 2)  // just in case
+    {
+        passCount = 0;
+    }
+
+}
+
+

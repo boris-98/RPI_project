@@ -21,9 +21,10 @@ public:
     //void measure();
 
 private:
-    QObject *objekat;
-    static char wheelCount;
+    static QObject *objekat;
+    static char passCount;
     static int lastMillis;
+    static int currentMillis;
     static double wheelRadius;
 
 };

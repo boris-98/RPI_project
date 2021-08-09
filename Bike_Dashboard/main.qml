@@ -13,38 +13,73 @@ ApplicationWindow {
     height: 480
     title: qsTr("Bike Dashboard")
 
-    property bool first : true
+    property int watchDog : 0
+    property bool firstCoord : true
+    property int seconds : 0
+    property int minutes : 0
+    property int hours : 0
+    property real wheelRadius : 0.3
+    property double distance : 0
 
-    function addCoordinatesToMap(lat, lon){
+    function addCoordinatesToMap(lat, lon) {
         cyclePath.addCoordinate(QtPositioning.coordinate(lat, lon))
 
-        if(first)   // center and zoom map only for the first recieved coordinate
+        if(firstCoord)   // center and zoom map only for the first recieved coordinate
         {
             navigationMap.center = QtPositioning.coordinate(lat, lon)
             navigationMap.zoomLevel = 16
-            first = false
+            firstCoord = false
         }
         console.log("addCoordinatesToMap is executed")
         console.log(lat)
     }
 
+    function changeSpeed(speed) {
+        crc.value = speed
+        distance = distance + 2 * Math.PI * wheelRadius
+        watchDog = 0
+        stopwatchTimer.running = true
+
+        console.log("changeSpeed is executed")
+    }
+
+    Timer {
+        id : stopwatchTimer
+        interval: 1000; running: false; repeat: true
+
+        onTriggered: {
+            watchDog = watchDog + 1;
+            if(watchDog == 10)   // basically not moving
+                crc.value = 0
+
+            if(crc.value > 1) {
+                if(seconds < 59) {
+                    seconds = seconds + 1;
+                }
+                else {
+                    seconds = 0;
+
+                    if(minutes < 59) {
+                        minutes = minutes + 1;
+                    }
+                    else {
+                        minutes = 0;
+
+                        if(hours < 12) {
+                            hours = hours + 1;
+                        }
+                        else {
+                            hours = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     Plugin {
         id: mapPlugin
         name: "esri"
-//               PluginParameter {
-//                    name: "osm.mapping.custom.host"
-//                    value: "http://a.tile.openstreetmap.fr/hot/"
-//                }
-//               PluginParameter {
-//                           name: "osm.mapping.providersrepository.disabled"
-//                           value: "true"
-//                       }
-
-        //PluginParameter { name: "osm.mapping.prefetching_style"; value: "NoPrefetching" }
-//        PluginParameter{
-//            name: "mapboxgl.access_token"
-//            value: "pk.eyJ1IjoiYmJvcmlzcyIsImEiOiJja3IzZXE0a3oyaWVtMzFxaDRlZ3N6ZGk0In0.YtKDQAVsJ7U0Qd2_vz2GEA"
-//        }
 
     }
 
@@ -59,7 +94,6 @@ ApplicationWindow {
 
             Canvas {
                     id: canvas
-                    //scale: 2
                     anchors.fill: parent
                     anchors.centerIn: parent
 
@@ -107,28 +141,27 @@ ApplicationWindow {
             CircularGauge {
 
                 id: crc
-                //scale: 2
                 maximumValue: 60
                 stepSize: 0.1
-                value: accelerating ? maximumValue : 0
+                value: 0//accelerating ? maximumValue : 0
                 anchors.centerIn: parent
                 onValueChanged: canvas.requestPaint()
 
                 property bool accelerating: false
 
-                Keys.onSpacePressed: accelerating = true
-                Keys.onReleased: {
-                    if (event.key === Qt.Key_Space) {
-                        accelerating = false;
-                        event.accepted = true;
-                    }
-                }
+//                Keys.onSpacePressed: accelerating = true
+//                Keys.onReleased: {
+//                    if (event.key === Qt.Key_Space) {
+//                        accelerating = false;
+//                        event.accepted = true;
+//                    }
+//                }
 
-                Component.onCompleted: forceActiveFocus()
+//                Component.onCompleted: forceActiveFocus()
 
                 Behavior on value {
                     NumberAnimation {
-                        duration: 2500
+                        duration: 1000
                     }
                 }
 
@@ -168,6 +201,31 @@ ApplicationWindow {
                     elide: Text.ElideLeft
                     font.pixelSize: 50
                 }
+
+                Button {
+                    id : resetButton
+                    text: "Reset"
+                    onPressAndHold: {hours = 0; minutes = 0; seconds = 0; distance = 0; crc.value = 0; stopwatchTimer.running = false; }
+                    x : 125
+                    y : 325
+                }
+
+            }
+
+            Text {
+                id: stopwatchText
+                x : parent.width - 180
+                y : 50
+                text: hours.toString() + ":" + minutes.toString() + ":" + seconds.toString()
+                font.pixelSize: 50
+            }
+
+            Text {
+                x : 30
+                y : 50
+                id: distanceText
+                text: ((distance/1000).toFixed(1)).toString() + "km"
+                font.pixelSize: 50
             }
 
         }
