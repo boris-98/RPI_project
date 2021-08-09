@@ -1,3 +1,6 @@
+LIBS += -L/usr/local/lib -lwiringPi
+LIBS += -L/usr/local/lib -lwiringPiDev
+
 QT += core bluetooth
 QT += qml network quick positioning location
 CONFIG += c++11
@@ -21,7 +24,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     bluetoothserver.cpp \
-    bluetoothmain.cpp
+    bluetoothmain.cpp \
+    hallmeasure.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,4 +42,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     bluetoothserver.h \
-    bluetoothmain.h
+    bluetoothmain.h \
+    hallmeasure.h

@@ -6,6 +6,6 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.10
 
 Page {
-    width: 1000
-    height: 700
+    width: 800
+    height: 480
 }

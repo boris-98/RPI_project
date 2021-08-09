@@ -9,8 +9,8 @@ import QtGraphicalEffects 1.0
 
 ApplicationWindow {
     visible: true
-    width: 1000
-    height: 700
+    width: 800
+    height: 480
     title: qsTr("Bike Dashboard")
 
     property bool first : true
@@ -59,7 +59,7 @@ ApplicationWindow {
 
             Canvas {
                     id: canvas
-                    scale: 2
+                    //scale: 2
                     anchors.fill: parent
                     anchors.centerIn: parent
 
@@ -71,8 +71,9 @@ ApplicationWindow {
                         c.beginPath()
                         c.lineWidth = 20
                         c.strokeStyle = "red"
-                        c.arc(width / 2, height / 2, 170 , 0, 5.06145483 * crc.value/80)    // 290 degrees = 5.06...
+                        c.arc(width / 2, height / 2, 170 , 0, 5.06145483 * crc.value/crc.maximumValue)    // 290 degrees = 5.06...rad
                         c.stroke()
+                        c.globalAlpha = 0.75
                     }
                 }
 
@@ -106,8 +107,8 @@ ApplicationWindow {
             CircularGauge {
 
                 id: crc
-                scale: 2
-                maximumValue: 80
+                //scale: 2
+                maximumValue: 60
                 stepSize: 0.1
                 value: accelerating ? maximumValue : 0
                 anchors.centerIn: parent
@@ -127,7 +128,7 @@ ApplicationWindow {
 
                 Behavior on value {
                     NumberAnimation {
-                        duration: 10000
+                        duration: 2500
                     }
                 }
 
@@ -139,15 +140,24 @@ ApplicationWindow {
                         text: styleData.value
                         color: styleData.value >= crc.value ? "grey" : "black"
                         antialiasing: true
+
                     }
 
                     tickmark: Rectangle {
-                                    //visible: styleData.value < 80 || styleData.value % 10 == 0
-                                    implicitWidth: styleData.value >= crc.value ? outerRadius * 0.02 : outerRadius * 0.03
-                                    antialiasing: true
-                                    implicitHeight: styleData.value >= crc.value ? outerRadius * 0.06 : outerRadius * 0.08
-                                    color: styleData.value >= crc.value ? "grey" : "black"
-                                }
+                        implicitWidth: styleData.value >= crc.value ? outerRadius * 0.02 : outerRadius * 0.03
+                        antialiasing: true
+                        implicitHeight: styleData.value >= crc.value ? outerRadius * 0.06 : outerRadius * 0.08
+                        color: styleData.value >= crc.value ? "grey" : "black"
+                    }
+
+                    minorTickmark: Rectangle {
+                        visible: styleData.value < 80
+                        implicitWidth: outerRadius * 0.01
+                        antialiasing: true
+                        implicitHeight: outerRadius * 0.03
+                        color: styleData.value >= crc.value ? "grey" : "black"
+                    }
+
                 }
 
                 Text {
