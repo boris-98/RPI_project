@@ -111,32 +111,6 @@ ApplicationWindow {
                     }
                 }
 
-//                ConicalGradient {
-//                    id: progress
-
-//                    rotation: -235
-//                        anchors.fill: bar
-//                        angle: crc.value
-//                        gradient: Gradient {
-//                            GradientStop { position: 0.0; color: "transparent" }
-//                            GradientStop { position: 0.1; color: "white" }
-//                        }
-//                         visible: false // Not visible (it will be painted by the mask)
-//                }
-//                OpacityMask {
-//                        anchors.fill: progress
-//                        rotation: -235
-//                        source: bar
-//                        maskSource: progress
-//                        invert: true
-//                    }
-
-//                Slider {
-//                    id: circ
-//                    value : 0.5
-//                    onValueChanged: canvas.requestPaint()
-//                }
-
 
             CircularGauge {
 
@@ -148,16 +122,6 @@ ApplicationWindow {
                 onValueChanged: canvas.requestPaint()
 
                 property bool accelerating: false
-
-//                Keys.onSpacePressed: accelerating = true
-//                Keys.onReleased: {
-//                    if (event.key === Qt.Key_Space) {
-//                        accelerating = false;
-//                        event.accepted = true;
-//                    }
-//                }
-
-//                Component.onCompleted: forceActiveFocus()
 
                 Behavior on value {
                     NumberAnimation {
@@ -205,7 +169,7 @@ ApplicationWindow {
                 Button {
                     id : resetButton
                     text: "Reset"
-                    onPressAndHold: {hours = 0; minutes = 0; seconds = 0; distance = 0; crc.value = 0; stopwatchTimer.running = false; }
+                    onPressAndHold: {hours = 0; minutes = 0; seconds = 0; distance = 0; crc.value = 0; stopwatchTimer.running = false; cyclePath.path = [{}]; firstCoord = true }
                     x : 125
                     y : 325
                 }
@@ -246,13 +210,16 @@ ApplicationWindow {
                     line.width: 4
                     line.color: 'blue'
                     path: [
-                        { latitude: 45.26, longitude: 19.81 },
-                        { latitude: 45.5, longitude: 20.0 },
-                        { latitude: 46.0, longitude: 21.0 }
+                        { latitude: 45.27932, longitude: 19.79132 },
+                        { latitude: 45.28071, longitude: 19.78356 },
+                        { latitude: 45.28130, longitude: 19.77919 },
+                        { latitude: 45.28271, longitude: 19.77346 },
+                        { latitude: 45.28365, longitude: 19.76861 },
+                        { latitude: 45.29103, longitude: 19.74626 },
+                        { latitude: 45.28923, longitude: 19.74496 },
                     ]
 
                 }
-
 
             }
 

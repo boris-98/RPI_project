@@ -52,7 +52,7 @@ void BluetoothMain::getObject(QObject *obj)
 
 void BluetoothMain::getCoordinates(const QString &sender, const QString &message)
 {
-    qDebug() << QString::fromLatin1("Sender is: %1").arg(sender);
+    //qDebug() << QString::fromLatin1("Sender is: %1").arg(sender);
 
     if(QString(message).left(6) == "$GPGGA")
     {
@@ -64,6 +64,7 @@ void BluetoothMain::getCoordinates(const QString &sender, const QString &message
             QVariant lat(newLatitude);
             QVariant lon(newLongitude);
             QMetaObject::invokeMethod(objekat, "addCoordinatesToMap", Q_ARG(QVariant, lat), Q_ARG(QVariant, lon));
+            qDebug() << QString::fromLatin1("Sender is: %1").arg(sender);
             qDebug() << message;
             //qDebug() << QString("%l").arg(newLatitude, 0, 'g', 30);
             oldLatitude = newLatitude;
