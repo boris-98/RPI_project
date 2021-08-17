@@ -20,6 +20,7 @@ public:
     ~BluetoothMain();
 
     void getObject(QObject *obj);
+    Q_INVOKABLE void resetCoords();
 
 
 private slots:
@@ -27,8 +28,6 @@ private slots:
 
     void clientConnected(const QString &name);
     void clientDisconnected(const QString &name);
-    //void clientDisconnected();
-    //void connected(const QString &name);
 
 private:
     BluetoothServer *server;

@@ -22,7 +22,6 @@ ApplicationWindow {
     property double distance : 0
 
     function addCoordinatesToMap(lat, lon) {
-        cyclePath.addCoordinate(QtPositioning.coordinate(lat, lon))
 
         if(firstCoord)   // center and zoom map only for the first recieved coordinate
         {
@@ -30,6 +29,8 @@ ApplicationWindow {
             navigationMap.zoomLevel = 16
             firstCoord = false
         }
+        cyclePath.addCoordinate(QtPositioning.coordinate(lat, lon))
+
         console.log("addCoordinatesToMap is executed")
         console.log(lat)
     }
@@ -44,11 +45,20 @@ ApplicationWindow {
     }
 
     Timer {
+        id: currentTimeUpdateTimer
+        interval: 60000; running: true; repeat: true
+
+        onTriggered: currentTime.text = Qt.formatTime(new Date(),"hh:mm") // update currentTime every minute
+
+    }
+
+    Timer {
         id : stopwatchTimer
         interval: 1000; running: false; repeat: true
 
         onTriggered: {
             watchDog = watchDog + 1;
+
             if(watchDog == 10)   // basically not moving
                 crc.value = 0
 
@@ -92,6 +102,20 @@ ApplicationWindow {
 
         SpeedometerPageForm {
 
+            header: Item {
+                height: 35
+
+                Text{
+                    id: currentTime
+                    text: Qt.formatTime(new Date(),"hh:mm")
+                    font.family: "Source Code Pro"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 50
+                    font.letterSpacing: 3
+                }
+            }
+
+
             Canvas {
                     id: canvas
                     anchors.fill: parent
@@ -117,7 +141,7 @@ ApplicationWindow {
                 id: crc
                 maximumValue: 60
                 stepSize: 0.1
-                value: 0//accelerating ? maximumValue : 0
+                value: 0
                 anchors.centerIn: parent
                 onValueChanged: canvas.requestPaint()
 
@@ -169,7 +193,8 @@ ApplicationWindow {
                 Button {
                     id : resetButton
                     text: "Reset"
-                    onPressAndHold: {hours = 0; minutes = 0; seconds = 0; distance = 0; crc.value = 0; stopwatchTimer.running = false; cyclePath.path = [{}]; firstCoord = true }
+                    onPressAndHold: {hours = 0; minutes = 0; seconds = 0; distance = 0; crc.value = 0; stopwatchTimer.running = false;
+                                     cyclePath.path = []; firstCoord = true; bluetoothMain.resetCoords() }
                     x : 125
                     y : 325
                 }
@@ -182,14 +207,28 @@ ApplicationWindow {
                 y : 50
                 text: hours.toString() + ":" + minutes.toString() + ":" + seconds.toString()
                 font.pixelSize: 50
+
+                Text {
+                    id: labelStopwatch
+                    text: qsTr("stopwatch")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y : 60
+                }
             }
 
             Text {
+                id: distanceText
                 x : 30
                 y : 50
-                id: distanceText
                 text: ((distance/1000).toFixed(1)).toString() + "km"
                 font.pixelSize: 50
+
+                Text {
+                    id: labelDistance
+                    text: qsTr("distance")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y : 60
+                }
             }
 
         }
@@ -226,6 +265,7 @@ ApplicationWindow {
         }
 
     }
+
 
     footer: TabBar {
         id: tabBar

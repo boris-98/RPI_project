@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_BluetoothMain_t {
-    QByteArrayData data[8];
-    char stringdata0[85];
+    QByteArrayData data[9];
+    char stringdata0[97];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,12 +38,13 @@ QT_MOC_LITERAL(3, 30, 6), // "sender"
 QT_MOC_LITERAL(4, 37, 7), // "message"
 QT_MOC_LITERAL(5, 45, 15), // "clientConnected"
 QT_MOC_LITERAL(6, 61, 4), // "name"
-QT_MOC_LITERAL(7, 66, 18) // "clientDisconnected"
+QT_MOC_LITERAL(7, 66, 18), // "clientDisconnected"
+QT_MOC_LITERAL(8, 85, 11) // "resetCoords"
 
     },
     "BluetoothMain\0getCoordinates\0\0sender\0"
     "message\0clientConnected\0name\0"
-    "clientDisconnected"
+    "clientDisconnected\0resetCoords"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,7 +54,7 @@ static const uint qt_meta_data_BluetoothMain[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,14 +62,20 @@ static const uint qt_meta_data_BluetoothMain[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   29,    2, 0x08 /* Private */,
-       5,    1,   34,    2, 0x08 /* Private */,
-       7,    1,   37,    2, 0x08 /* Private */,
+       1,    2,   34,    2, 0x08 /* Private */,
+       5,    1,   39,    2, 0x08 /* Private */,
+       7,    1,   42,    2, 0x08 /* Private */,
+
+ // methods: name, argc, parameters, tag, flags
+       8,    0,   45,    2, 0x02 /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString,    3,    4,
     QMetaType::Void, QMetaType::QString,    6,
     QMetaType::Void, QMetaType::QString,    6,
+
+ // methods: parameters
+    QMetaType::Void,
 
        0        // eod
 };
@@ -82,6 +89,7 @@ void BluetoothMain::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 0: _t->getCoordinates((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
         case 1: _t->clientConnected((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 2: _t->clientDisconnected((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 3: _t->resetCoords(); break;
         default: ;
         }
     }
@@ -112,13 +120,13 @@ int BluetoothMain::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }
