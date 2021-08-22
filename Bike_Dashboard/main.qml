@@ -5,7 +5,7 @@ import QtLocation 5.11
 import QtPositioning 5.11
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
-import QtGraphicalEffects 1.0
+
 
 ApplicationWindow {
     visible: true
@@ -21,12 +21,13 @@ ApplicationWindow {
     property real wheelRadius : 0.3
     property double distance : 0
 
+
     function addCoordinatesToMap(lat, lon) {
 
         if(firstCoord)   // center and zoom map only for the first recieved coordinate
         {
             navigationMap.center = QtPositioning.coordinate(lat, lon)
-            navigationMap.zoomLevel = 16
+            navigationMap.zoomLevel = 17
             firstCoord = false
         }
         cyclePath.addCoordinate(QtPositioning.coordinate(lat, lon))
@@ -39,7 +40,8 @@ ApplicationWindow {
         crc.value = speed
         distance = distance + 2 * Math.PI * wheelRadius
         watchDog = 0
-        stopwatchTimer.running = true
+        if(stopwatchTimer === false)
+            stopwatchTimer.running = true
 
         console.log("changeSpeed is executed")
     }
@@ -50,6 +52,23 @@ ApplicationWindow {
 
         onTriggered: currentTime.text = Qt.formatTime(new Date(),"hh:mm") // update currentTime every minute
 
+    }
+
+    Timer {
+        id: tempTimer
+        interval: 1000; running: true; repeat: true
+
+        onTriggered: {
+            inclineTriangle.requestPaint()
+            var temp = accMeasure.getAcc()
+
+            if(accMeasure.getAcc() > 0)
+                inclineText.text =  "ascent " + temp + "°"
+            else if(accMeasure.getAcc() < 0)
+                inclineText.text = "descent " + temp + "°"
+            else
+                inclineText.text = "   flat"
+        }
     }
 
     Timer {
@@ -115,7 +134,6 @@ ApplicationWindow {
                 }
             }
 
-
             Canvas {
                     id: canvas
                     anchors.fill: parent
@@ -145,8 +163,6 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 onValueChanged: canvas.requestPaint()
 
-                property bool accelerating: false
-
                 Behavior on value {
                     NumberAnimation {
                         duration: 1000
@@ -161,7 +177,6 @@ ApplicationWindow {
                         text: styleData.value
                         color: styleData.value >= crc.value ? "grey" : "black"
                         antialiasing: true
-
                     }
 
                     tickmark: Rectangle {
@@ -229,6 +244,43 @@ ApplicationWindow {
                     anchors.horizontalCenter: parent.horizontalCenter
                     y : 60
                 }
+            }
+
+            Canvas {
+                id: inclineTriangle
+                anchors.fill: parent
+
+                onPaint: {
+                    var context = getContext("2d")
+
+                    context.clearRect(0, 0, width, height)
+                    context.beginPath();
+
+                    if(accMeasure.getAcc() >= 0){
+                        context.moveTo(30, height - 50);
+                        context.lineTo(180, height - 50);
+                        context.lineTo(180, height - 50 - accMeasure.getAcc()*3);
+                    }
+                    else
+                    {
+                        context.moveTo(180, height - 50);
+                        context.lineTo(30, height - 50);
+                        context.lineTo(30, height - 50 + accMeasure.getAcc()*3);
+                    }
+
+                    context.closePath();
+                    context.lineWidth = 10;
+                    context.fillStyle = "red";
+                    context.fill();
+                }
+            }
+            Text {
+                id: inclineText
+                x: 50
+                y: parent.height - 50
+
+                font.pixelSize: 25
+                font.letterSpacing: 2
             }
 
         }

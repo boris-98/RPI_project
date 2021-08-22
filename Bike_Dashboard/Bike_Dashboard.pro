@@ -25,7 +25,8 @@ SOURCES += \
         main.cpp \
     bluetoothserver.cpp \
     bluetoothmain.cpp \
-    hallmeasure.cpp
+    hallmeasure.cpp \
+    accmeasure.cpp
 
 RESOURCES += qml.qrc
 
@@ -43,4 +44,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     bluetoothserver.h \
     bluetoothmain.h \
-    hallmeasure.h
+    hallmeasure.h \
+    accmeasure.h

@@ -14,8 +14,6 @@ BluetoothServer::~BluetoothServer()
 
 void BluetoothServer::startServer(const QBluetoothAddress &localAdapter)
 {
-    if(rfcommServer)
-        return;
 
     //-------------------- creating server --------------------//
     rfcommServer = new QBluetoothServer(QBluetoothServiceInfo::RfcommProtocol, this);
@@ -28,7 +26,7 @@ void BluetoothServer::startServer(const QBluetoothAddress &localAdapter)
     }
     //---------------------------------------------------------//
 
-    //------- Class Uuuid must contain at least 1 entry -------//
+    //------- Class Uuid must contain at least 1 entry -------//
     QBluetoothServiceInfo::Sequence classId;
 
     classId << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::SerialPort));
@@ -39,12 +37,12 @@ void BluetoothServer::startServer(const QBluetoothAddress &localAdapter)
     //--------------------------------------------------------//
 
     // Service name
-    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceName, tr("Bt Server"));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceName, tr("Qt bt Server"));
     // Description
     serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceDescription,
                              tr("Bluetooth server for GPS coordinates"));
     // Provider
-    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("blabla"));     // <__________________
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("qt-project.org"));     // <__________________
 
     // Service UUID set
     serviceInfo.setServiceUuid(QBluetoothUuid(serviceUuid));
@@ -119,7 +117,7 @@ void BluetoothServer::readSocket()
         QByteArray line = socket->readLine().trimmed();
 
         if(QString::fromUtf8(line.constData(), line.length()).left(6) == "$GPGGA")
-            emit coordinatesReceived(socket->peerName(), QString::fromUtf8(line.constData(), line.length()));
+            emit coordinatesReceived(socket->peerName(), QString::fromUtf8(line.constData()));
 
     }
 

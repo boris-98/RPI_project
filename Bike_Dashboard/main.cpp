@@ -1,12 +1,11 @@
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQuick/QQuickItem>
-#include <QGeoCoordinate>
 #include <QQuickView>
 #include <QQmlContext>
-#include <wiringPi.h>
 #include "bluetoothmain.h"
 #include "hallmeasure.h"
+#include "accmeasure.h"
 
 
 int main(int argc, char *argv[])
@@ -17,6 +16,7 @@ int main(int argc, char *argv[])
 
     BluetoothMain gpsReciever;
     HallMeasure wheelHall;
+    AccMeasure accSensor;
 
     QQmlApplicationEngine engine;
 
@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 
     QQmlContext *context = engine.rootContext();
     context->setContextProperty("bluetoothMain", &gpsReciever); // giving QML access to C++ object
+    context->setContextProperty("accMeasure", &accSensor);
 
     QObject *object = component.create();
     gpsReciever.getObject(object);  //giving C++ object access to QML
