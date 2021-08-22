@@ -22,7 +22,7 @@ public:
     AccMeasure();
     ~AccMeasure();
 
-    Q_INVOKABLE int getAcc();
+    Q_INVOKABLE int getAcc(bool);
 
 private:
 

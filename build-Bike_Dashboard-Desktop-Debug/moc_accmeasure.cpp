@@ -54,10 +54,10 @@ static const uint qt_meta_data_AccMeasure[] = {
        0,       // signalCount
 
  // methods: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x02 /* Public */,
+       1,    1,   19,    2, 0x02 /* Public */,
 
  // methods: parameters
-    QMetaType::Int,
+    QMetaType::Int, QMetaType::Bool,    2,
 
        0        // eod
 };
@@ -68,7 +68,7 @@ void AccMeasure::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         AccMeasure *_t = static_cast<AccMeasure *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: { int _r = _t->getAcc();
+        case 0: { int _r = _t->getAcc((*reinterpret_cast< bool(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }

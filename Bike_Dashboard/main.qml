@@ -55,19 +55,20 @@ ApplicationWindow {
     }
 
     Timer {
-        id: tempTimer
+        id: inclineTimer
         interval: 1000; running: true; repeat: true
 
         onTriggered: {
             inclineTriangle.requestPaint()
-            var temp = accMeasure.getAcc()
+            //var tempDeg = accMeasure.getAcc(0)
+            var tempGrad = accMeasure.getAcc(1)
 
-            if(accMeasure.getAcc() > 0)
-                inclineText.text =  "ascent " + temp + "°"
-            else if(accMeasure.getAcc() < 0)
-                inclineText.text = "descent " + temp + "°"
+            if(tempGrad > 0)
+                inclineText.text = tempGrad + "% ascent";
+            else if(tempGrad < 0)
+                inclineText.text = Math.abs(tempGrad) + "% descent";
             else
-                inclineText.text = "   flat"
+                inclineText.text = "      flat"
         }
     }
 
@@ -256,16 +257,16 @@ ApplicationWindow {
                     context.clearRect(0, 0, width, height)
                     context.beginPath();
 
-                    if(accMeasure.getAcc() >= 0){
+                    if(accMeasure.getAcc(0) >= 0){
                         context.moveTo(30, height - 50);
                         context.lineTo(180, height - 50);
-                        context.lineTo(180, height - 50 - accMeasure.getAcc()*3);
+                        context.lineTo(180, height - 50 - accMeasure.getAcc(0)*3);
                     }
                     else
                     {
                         context.moveTo(180, height - 50);
                         context.lineTo(30, height - 50);
-                        context.lineTo(30, height - 50 + accMeasure.getAcc()*3);
+                        context.lineTo(30, height - 50 + accMeasure.getAcc(0)*3);
                     }
 
                     context.closePath();
@@ -276,7 +277,7 @@ ApplicationWindow {
             }
             Text {
                 id: inclineText
-                x: 50
+                x: 35
                 y: parent.height - 50
 
                 font.pixelSize: 25

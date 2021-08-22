@@ -13,7 +13,7 @@ AccMeasure::AccMeasure() : QObject ()
 
 AccMeasure::~AccMeasure() {}
 
-int AccMeasure::getAcc()
+int AccMeasure::getAcc(bool degOrGrad)
 {
     int AccX = wiringPiI2CReadReg16(fd, X0_REG);    // reading 16bits from address of 8bit register -> X1 REG is also being read i.e. upper 8 bits of data
     int AccY = wiringPiI2CReadReg16(fd, Y0_REG);
@@ -27,5 +27,10 @@ int AccMeasure::getAcc()
 
    // qDebug() << pitch << "   " << gradient;
 
-    return int(pitch);  //(QString::number(int(pitch)) + "," + QString::number(int(gradient)));
+    if(!degOrGrad)
+        return int(pitch);
+    else {
+        return int(gradient);
+    }
+
 }
