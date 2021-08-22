@@ -40,7 +40,7 @@ ApplicationWindow {
         crc.value = speed
         distance = distance + 2 * Math.PI * wheelRadius
         watchDog = 0
-        if(stopwatchTimer === false)
+        if(stopwatchTimer.running === false)
             stopwatchTimer.running = true
 
         console.log("changeSpeed is executed")
