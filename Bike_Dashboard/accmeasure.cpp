@@ -22,7 +22,8 @@ int AccMeasure::getAcc(bool degOrGrad)
     AccY = -(~int16_t(AccY) + 1);
     AccZ = -(~int16_t(AccZ) + 1);
 
-    double pitch = atan2((double(AccX) * 0.0312), sqrt(pow(double(AccY)*0.0312, 2) + pow(double(AccZ)*0.0312, 2))) * 180 / M_PI;    // in degrees
+   // double pitch = atan2((double(AccX) * 0.0312), sqrt(pow(double(AccY)*0.0312, 2) + pow(double(AccZ)*0.0312, 2))) * 180 / M_PI;    // 3D, in degrees
+    double pitch = atan2((double(AccX) * 0.0312), (double(AccZ) * 0.0312)) * 180 / M_PI;    // 2D, degrees
     double gradient = tan(pitch * M_PI / 180) * 100;    // in precentage
 
    // qDebug() << pitch << "   " << gradient;

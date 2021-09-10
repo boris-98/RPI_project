@@ -3,7 +3,7 @@
 char HallMeasure::passCount = 0;
 int HallMeasure::lastMillis = 0;
 int HallMeasure::currentMillis = 0;
-double HallMeasure::wheelRadius = 0.30;
+double HallMeasure::wheelRadius = 0.35;
 QObject* HallMeasure::objekat;
 
 HallMeasure::HallMeasure() : QObject ()

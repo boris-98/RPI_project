@@ -9,6 +9,7 @@ import QtQuick.Extras 1.4
 
 ApplicationWindow {
     visible: true
+    visibility: ApplicationWindow.FullScreen
     width: 800
     height: 480
     title: qsTr("Bike Dashboard")
@@ -18,8 +19,10 @@ ApplicationWindow {
     property int seconds : 0
     property int minutes : 0
     property int hours : 0
-    property real wheelRadius : 0.3
+    property real wheelRadius : 0.35
     property double distance : 0
+    property bool exitFlag : false
+    property int exitDog : 0
 
 
     function addCoordinatesToMap(lat, lon) {
@@ -69,6 +72,12 @@ ApplicationWindow {
                 inclineText.text = Math.abs(tempGrad) + "% descent";
             else
                 inclineText.text = "      flat"
+
+            if(exitFlag)
+                exitDog = exitDog + 1;
+            if(exitDog == 5)
+                Qt.quit()
+
         }
     }
 
@@ -210,7 +219,8 @@ ApplicationWindow {
                     id : resetButton
                     text: "Reset"
                     onPressAndHold: {hours = 0; minutes = 0; seconds = 0; distance = 0; crc.value = 0; stopwatchTimer.running = false;
-                                     cyclePath.path = []; firstCoord = true; bluetoothMain.resetCoords() }
+                                     cyclePath.path = []; firstCoord = true; bluetoothMain.resetCoords(); exitFlag = true }
+                    onReleased: {exitFlag = false; exitDog = 0}
                     x : 125
                     y : 325
                 }
