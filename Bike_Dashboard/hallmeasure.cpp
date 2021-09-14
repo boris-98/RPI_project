@@ -38,7 +38,7 @@ void HallMeasure::hallInterrupt()
         if (diff < 0)
             diff = 60000 + diff;    // e.g. current = 100, last = 59500
 
-        double speed = 2 * M_PI * wheelRadius / (double(diff) / 1000.00);
+        double speed = (2 * M_PI * wheelRadius / (double(diff) / 1000.00)) * 3.6; // 3.6 -> converting to km/h
 
         QVariant spd(speed);
         QMetaObject::invokeMethod(objekat, "changeSpeed", Q_ARG(QVariant, spd));
